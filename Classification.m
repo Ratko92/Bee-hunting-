@@ -1,4 +1,5 @@
 
+
 clear all;
 %%
 load('truth_data.mat');
@@ -47,8 +48,8 @@ Feat_mat_reg =  ( Feat_mat - repmat(mi_norm,[size(Feat_mat,1),1])) ./  repmat(si
 centroid_yes = HB_desc_yes_mean;
 centroid_no = HB_desc_no_mean;
 
-KN = 1;
-KP = 1;
+KN = 0;
+KP = 0;
 for i = 1:size(Feat_mat)
     y_test(i) = Decide(Feat_mat(i,:),centroid_yes,centroid_no);
     if  y_test(i) 
@@ -65,11 +66,11 @@ end
 centroid_yes = HB_desc_norm_yes;
 centroid_no = HB_desc_norm_neg;
 
-KN = 1;
-KP = 1;
+KN = 0;
+KP = 0;
 for i = 1:size(Feat_mat)
     y_test_reg(i) = Decide(Feat_mat_reg(i,:),centroid_yes,centroid_no);
-    if  y_test(i) 
+    if  y_test_reg(i) 
         centroid_yes = (KP*(centroid_yes) + Feat_mat_reg(i,:))/(KP+1);
         KP = KP + 1;
     else
@@ -80,4 +81,5 @@ end
 
 acc = sum(y_true == y_test_reg')/size(Feat_mat,1);
 disp(acc)
+
 
