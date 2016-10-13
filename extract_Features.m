@@ -10,10 +10,13 @@ function [ HB_desc ] = extract_Features( image, mi )
  [~,k]= max([ stats.Area]);
  
  eccentricity = stats(k).MajorAxisLength ./ stats(k).MinorAxisLength;
+  m = bwlabel(mask);
+ m_k = m == k;
+ m_k_3 = repmat(m_k,[1,1,3]);
  % Lab variance
  [nrows, ncolumns] = size(image);
  cform = makecform('srgb2lab'); 
- lab_bee = applycform(image,cform);
+ lab_bee = applycform(image.*m_k_3,cform);
  [nrows, ncolumns,~] = size(image);
  tmp = reshape(lab_bee,[nrows*ncolumns,3]);
  tmp(all(~tmp,2), :) = [] ;
@@ -23,4 +26,6 @@ function [ HB_desc ] = extract_Features( image, mi )
  HB_desc = [eccentricity, sigma];
 
 end
+
+
 
